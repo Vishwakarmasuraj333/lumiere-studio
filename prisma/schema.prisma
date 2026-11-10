@@ -1,0 +1,114 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id                 String   @id @default(cuid())
+  email              String   @unique
+  passwordHash       String
+  name               String
+  role               String   @default("ADMIN")
+  mustChangePassword Boolean  @default(false)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+model Photo {
+  id          String   @id @default(cuid())
+  title       String
+  category    String   // "Wedding", "Fashion", "Portrait", "Nature", "Commercial", "Events"
+  description String?
+  imageUrl    String
+  cameraModel String?  @default("Hasselblad H6D-100c")
+  lensInfo    String?  @default("HC 2,2/100mm")
+  aperture    String?  @default("f/1.8")
+  location    String?  @default("Lake Como, Italy")
+  year        String?  @default("2025")
+  orientation String   @default("portrait") // "portrait", "landscape", "square"
+  featured    Boolean  @default(false)
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Booking {
+  id            String   @id @default(cuid())
+  reference     String   @unique
+  fullName      String
+  email         String
+  phone         String
+  service       String
+  preferredDate String
+  location      String
+  guestCount    String?
+  message       String?
+  status        String   @default("PENDING") // "PENDING", "CONFIRMED", "COMPLETED", "CANCELLED"
+  notes         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Service {
+  id            String   @id @default(cuid())
+  slug          String   @unique
+  name          String
+  tag           String
+  subtitle      String
+  description   String
+  priceStarting String
+  duration      String
+  deliverables  String   // JSON or comma separated string
+  imageUrl      String
+  order         Int      @default(0)
+  active        Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Testimonial {
+  id         String   @id @default(cuid())
+  clientName String
+  clientRole String
+  eventType  String
+  venue      String
+  avatarUrl  String
+  rating     Int      @default(5)
+  quote      String
+  featured   Boolean  @default(true)
+  order      Int      @default(0)
+  createdAt  DateTime @default(now())
+}
+
+model ContactInquiry {
+  id        String   @id @default(cuid())
+  fullName  String
+  email     String
+  phone     String?
+  subject   String
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model StudioSetting {
+  id              String   @id @default("studio_config")
+  studioName      String   @default("LUMIÈRE STUDIO")
+  tagline         String   @default("Where every frame tells a beautiful story.")
+  heroHeading     String   @default("CAPTURING TIMELESS MOMENTS.")
+  phone           String   @default("+1 (212) 847-9200")
+  email           String   @default("concierge@lumiere-studio.com")
+  address         String   @default("740 Madison Avenue, New York, NY 10065")
+  parisAddress    String   @default("18 Rue du Faubourg Saint-Honoré, 75008 Paris")
+  instagramUrl    String   @default("https://instagram.com/lumiere.studio")
+  awardsCount     Int      @default(28)
+  yearsExperience Int      @default(14)
+  eventsCount     Int      @default(420)
+  clientsRating   Float    @default(4.98)
+  updatedAt       DateTime @updatedAt
+}
+
